@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeamDev · Access</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #050508;
+    --surface: #0d0d14;
+    --border: rgba(82, 255, 168, 0.15);
+    --accent: #52ffa8;
+    --accent2: #a855f7;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --danger: #ff4560;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(82,255,168,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(82,255,168,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridShift 20s linear infinite;
+  }
+  @keyframes gridShift { to { background-position: 40px 40px; } }
+
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  .orb1 { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -100px; }
+  .orb2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; left: -100px; }
+
+  .wrap {
+    position: relative; z-index: 1;
+    width: 420px;
+    padding: 48px 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 0 80px rgba(82,255,168,0.05), 0 40px 80px rgba(0,0,0,0.6);
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: none; } }
+
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 40px;
+  }
+  .logo-mark {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px; font-weight: 700;
+    color: #000;
+  }
+  .logo-text { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .logo-text span { color: var(--accent); }
+
+  h2 {
+    font-size: 26px; font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 32px; font-family: 'Share Tech Mono', monospace; }
+
+  .field { margin-bottom: 20px; }
+  label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 8px; font-family: 'Share Tech Mono', monospace; }
+
+  input {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(82,255,168,0.1); }
+
+  .btn {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, var(--accent), #38d97a);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.5px;
+    border: none; border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+  .btn:hover { opacity: 0.9; }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .error-msg {
+    display: none;
+    background: rgba(255,69,96,0.1);
+    border: 1px solid rgba(255,69,96,0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--danger);
+    margin-bottom: 16px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .scanline {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+    pointer-events: none; z-index: 100;
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="scanline"></div>
+
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-mark">🫪</div>
+    <div class="logo-text">Team<span>Dev</span></div>
+  </div>
+
+  <h2>Admin Access</h2>
+  <p class="sub">// secure control panel</p>
+
+  <div class="error-msg" id="err"></div>
+
+  <div class="field">
+    <label>Username</label>
+    <input type="text" id="username" placeholder="admin" autocomplete="off">
+  </div>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="password" placeholder="••••••••">
+  </div>
+
+  <button class="btn" id="loginBtn" onclick="login()">Authenticate →</button>
+</div>
+
+<script>
+async function login() {
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('err');
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+
+  err.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Authenticating...';
+
+  try {
+    const r = await fetch('/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: u, password: p})
+    });
+    const data = await r.json();
+    if (r.ok) {
+      window.location.href = '/admin/';
+    } else {
+      err.textContent = '✕ Invalid credentials';
+      err.style.display = 'block';
+    }
+  } catch(e) {
+    err.textContent = '✕ Connection failed';
+    err.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Authenticate →';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+</script>
+</body>
+</html>

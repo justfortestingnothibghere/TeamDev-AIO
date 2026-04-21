@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeamDev AIO — All-In-One Downloader API</title>
+
+<meta name="description" content="TeamDev AIO is a powerful All-In-One Downloader API. Download media from any platform — Spotify, Terabox, XHamster, HentaiCity and more with a single API call.">
+<meta name="keywords" content="AIO downloader, media API, Spotify downloader, Terabox API, video downloader API, TeamDev, universal downloader">
+<meta name="author" content="TeamDev">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aio-production-df67.up.railway.app/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aio-production-df67.up.railway.app/">
+<meta property="og:title" content="TeamDev AIO — All-In-One Downloader API">
+<meta property="og:description" content="Download media from any platform with a single API call. Spotify, Terabox, and more.">
+<meta property="og:image" content="https://aio-production-df67.up.railway.app/static/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="TeamDev AIO">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://aio-production-df67.up.railway.app/">
+<meta name="twitter:title" content="TeamDev AIO — All-In-One Downloader API">
+<meta name="twitter:description" content="Download media from any platform with a single API call. Spotify, Terabox, and more.">
+<meta name="twitter:image" content="https://aio-production-df67.up.railway.app/static/og-image.jpg">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/static/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/static/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+
+<meta name="theme-color" content="#000000">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="/static/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #07080f;
+  --bg2: #0c0e1a;
+  --surface: #111320;
+  --surface2: #161929;
+  --border: rgba(100, 120, 255, 0.14);
+  --border2: rgba(255,255,255,0.06);
+  --accent: #6366f1;
+  --accent2: #8b5cf6;
+  --accent3: #06b6d4;
+  --accent4: #10b981;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #475569;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+
+.noise {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+.glow-orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(120px); pointer-events: none; z-index: 0;
+}
+.orb1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%); top: -200px; left: -200px; }
+.orb2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%); bottom: -100px; right: -100px; }
+.orb3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%); top: 40%; left: 60%; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 40px;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(7,8,15,0.8);
+  backdrop-filter: blur(20px);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 800; font-size: 18px; letter-spacing: -0.5px;
+  text-decoration: none; color: var(--text);
+}
+
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+
+.logo-icon dotlottie-player {
+  width: 28px; height: 28px;
+}
+
+.nav-links {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px; font-weight: 500;
+  color: var(--text2);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.nav-link:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+
+.nav-cta {
+  padding: 8px 18px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none; cursor: pointer;
+}
+.nav-cta:hover { background: #4f46e5; transform: translateY(-1px); }
+
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 100px 40px 60px;
+  position: relative; z-index: 1;
+  text-align: center;
+}
+
+.hero-inner { max-width: 820px; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.25);
+  border-radius: 99px;
+  font-size: 12px; font-weight: 600;
+  color: #a5b4fc;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  background: #6366f1;
+  border-radius: 50%;
+  animation: badgePulse 2s ease infinite;
+  box-shadow: 0 0 8px #6366f1;
+}
+
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero h1 {
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+.hero h1 .gradient {
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 40%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 580px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.hero-actions {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 15px; font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none; cursor: pointer;
+}
+.btn-primary:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.4); }
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--text);
+  border-radius: 12px;
+  font-size: 15px; font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--border2);
+  transition: all 0.2s;
+}
+.btn-outline:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+
+.hero-stats {
+  display: flex; align-items: center; justify-content: center; gap: 48px;
+  padding: 28px 40px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  flex-wrap: wrap;
+}
+
+.stat-item { text-align: center; }
+.stat-num {
+  font-size: 32px; font-weight: 900;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label { font-size: 12px; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+
+.stat-divider { width: 1px; height: 40px; background: var(--border); }
+
+section { position: relative; z-index: 1; }
+
+.container { max-width: 1140px; margin: 0 auto; padding: 0 40px; }
+
+.section-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: 16px;
+  color: var(--text2);
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.platforms-section { padding: 100px 0; }
+
+.platforms-header { margin-bottom: 60px; }
+
+.platforms-scroll {
+  overflow: hidden;
+  -webkit-mask: linear-gradient(90deg, transparent, #fff 10%, #fff 90%, transparent);
+  mask: linear-gradient(90deg, transparent, #fff 10%, #fff 90%, transparent);
+}
+
+.platforms-track {
+  display: flex; gap: 12px;
+  animation: scrollTrack 28s linear infinite;
+  width: max-content;
+}
+
+.platforms-track2 {
+  display: flex; gap: 12px;
+  animation: scrollTrack2 32s linear infinite;
+  width: max-content;
+  margin-top: 12px;
+}
+
+@keyframes scrollTrack { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes scrollTrack2 { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.platform-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.platform-chip dotlottie-player {
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+}
+
+.endpoints-section { padding: 100px 0; background: linear-gradient(180deg, transparent 0%, rgba(99,102,241,0.03) 50%, transparent 100%); }
+
+.endpoints-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  margin-top: 52px;
+}
+
+.endpoint-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.25s;
+  cursor: default;
+}
+
+.endpoint-card:hover {
+  border-color: rgba(99,102,241,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.endpoint-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.endpoint-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+
+.endpoint-icon dotlottie-player { width: 36px; height: 36px; }
+
+.method-badge {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 10px; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+.get { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+.endpoint-path {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--accent3);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.endpoint-name {
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.endpoint-desc {
+  font-size: 13px; color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.endpoint-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.endpoint-tag {
+  padding: 3px 8px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 4px;
+  font-size: 10px;
+  color: #a5b4fc;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.examples-section { padding: 100px 0; }
+
+.examples-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 52px;
+  align-items: start;
+}
+
+.example-tabs {
+  display: flex; gap: 4px;
+  margin-bottom: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 7px;
+  font-size: 12px; font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  border: none; cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text2);
+  background: none;
+}
+.tab-btn.active {
+  background: var(--surface2);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.code-block {
+  background: #0a0c16;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+
+.code-dots { display: flex; gap: 6px; }
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #ef4444; }
+.dot-y { background: #f59e0b; }
+.dot-g { background: #10b981; }
+
+.copy-btn {
+  font-size: 11px; font-weight: 600;
+  color: var(--text3);
+  background: none; border: none;
+  cursor: pointer; padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  font-family: 'JetBrains Mono', monospace;
+}
+.copy-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+.code-body {
+  padding: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+.code-panel { display: none; }
+.code-panel.active { display: block; }
+
+.c-comment { color: #475569; }
+.c-kw { color: #a78bfa; }
+.c-fn { color: #67e8f9; }
+.c-str { color: #6ee7b7; }
+.c-var { color: #f1f5f9; }
+.c-num { color: #fbbf24; }
+.c-key { color: #818cf8; }
+.c-url { color: #f9a8d4; }
+
+.response-block {
+  background: #0a0c16;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.response-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+
+.status-200 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 600;
+  color: var(--accent4);
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.2);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.response-body {
+  padding: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text2);
+}
+
+.faq-section { padding: 100px 0; }
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 52px;
+}
+
+.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.faq-item:hover { border-color: rgba(99,102,241,0.35); }
+
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 15px; font-weight: 600;
+  gap: 16px;
+}
+
+.faq-arrow {
+  color: var(--text3);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+.faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--accent); }
+
+.faq-a {
+  display: none;
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border2);
+}
+.faq-item.open .faq-a { display: block; }
+
+.links-section { padding: 80px 0; }
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.link-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.link-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-2px); background: var(--surface2); }
+
+.link-card-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.link-card-icon dotlottie-player { width: 32px; height: 32px; }
+
+.link-card-label { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.link-card-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.link-card-sub { font-size: 12px; color: var(--text2); }
+
+.skeleton-section { padding: 80px 0; }
+
+.skel-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  overflow: hidden;
+  position: relative;
+}
+
+.skel-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shimmer 2s ease infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skel-line {
+  height: 12px;
+  background: var(--surface2);
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.skel-line.short { width: 30%; }
+.skel-line.medium { width: 60%; }
+.skel-line.long { width: 85%; }
+.skel-line.full { width: 100%; }
+
+.skel-code-lines {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 16px;
+}
+
+.skel-code-line {
+  height: 10px;
+  background: rgba(99,102,241,0.08);
+  border-radius: 4px;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+
+.footer-left { display: flex; align-items: center; gap: 12px; }
+
+.footer-copy { font-size: 13px; color: var(--text3); }
+
+.footer-links { display: flex; gap: 20px; }
+.footer-link {
+  font-size: 13px; color: var(--text3);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-link:hover { color: var(--text); }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links .nav-link { display: none; }
+  .hero { padding: 90px 20px 40px; }
+  .hero-stats { gap: 24px; padding: 20px; }
+  .stat-divider { display: none; }
+  .container { padding: 0 20px; }
+  .examples-layout { grid-template-columns: 1fr; }
+  footer { padding: 24px 20px; flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="glow-orb orb1"></div>
+<div class="glow-orb orb2"></div>
+<div class="glow-orb orb3"></div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="logo-icon">
+      <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop style="width:28px;height:28px;"></dotlottie-player>
+    </div>
+    TeamDev AIO
+  </a>
+  <div class="nav-links">
+    <a href="#endpoints" class="nav-link">Endpoints</a>
+    <a href="#examples" class="nav-link">Examples</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="https://t.me/TeamDevXBots" target="_blank" class="nav-link">Updates</a>
+    <a href="https://t.me/MR_ARMAN_08" target="_blank" class="nav-cta">Get API Key</a>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        v2.0 Now Live — 35+ Platforms
+      </div>
+
+      <h1>
+        Download Anything<br>
+        <span class="gradient">All-In-One API</span>
+      </h1>
+
+      <p>
+        A powerful, fast, and reliable media downloader API. Extract videos, audio, and content from 35+ platforms with a single unified endpoint.
+      </p>
+
+      <div class="hero-actions">
+        <a href="https://t.me/MR_ARMAN_08" target="_blank" class="btn-primary">
+          <dotlottie-player src="https://lottie.host/b2e96cff-a5f4-43fb-9fe4-b84ac4680db1/bPvyV30bIe.lottie" background="transparent" speed="1" autoplay loop style="width:20px;height:20px;"></dotlottie-player>
+          Get API Key
+        </a>
+        <a href="#examples" class="btn-outline">
+          View Examples →
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">35+</div>
+          <div class="stat-label">Platforms</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Endpoints</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">99.9%</div>
+          <div class="stat-label">Uptime</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">&lt;500ms</div>
+          <div class="stat-label">Avg Response</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="platforms-section">
+    <div class="container">
+      <div class="platforms-header">
+        <div class="section-tag">Supported Platforms</div>
+        <h2 class="section-title">Works Everywhere You Need</h2>
+        <p class="section-sub">One API to rule them all. From mainstream social media to niche platforms.</p>
+      </div>
+    </div>
+
+    <div class="platforms-scroll">
+      <div class="platforms-track">
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> YouTube</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> TikTok</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Instagram</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Facebook</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Twitter / X</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Spotify</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Vimeo</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Dailymotion</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Pinterest</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Bandcamp</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> YouTube</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> TikTok</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Instagram</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Spotify</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Pinterest</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Vimeo</div>
+      </div>
+      <div class="platforms-track2">
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Reddit</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Twitch</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> SoundCloud</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> LinkedIn</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Snapchat</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Tumblr</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Bilibili</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Niconico</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Mixcloud</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Odysee</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Reddit</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Twitch</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> SoundCloud</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Bilibili</div>
+        <div class="platform-chip"><dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player> Odysee</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="endpoints-section" id="endpoints">
+    <div class="container">
+      <div class="section-tag">API Endpoints</div>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-sub">Clean, consistent REST endpoints. Pass your API key and a URL — get back rich structured data.</p>
+
+      <div class="endpoints-grid">
+
+        <div class="endpoint-card">
+          <div class="endpoint-top">
+            <div class="endpoint-icon" style="background:rgba(99,102,241,0.12);">
+              <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+            </div>
+            <span class="method-badge get">GET</span>
+          </div>
+          <div class="endpoint-path">/api/v1/dl</div>
+          <div class="endpoint-name">AIO Universal Downloader</div>
+          <div class="endpoint-desc">Supports YouTube, TikTok, Instagram, Facebook, Twitter/X, Vimeo, Dailymotion, Pinterest, Bandcamp, and 35+ more sites via yt-dlp.</div>
+          <div class="endpoint-tags">
+            <span class="endpoint-tag">?url=</span>
+            <span class="endpoint-tag">?api=</span>
+            <span class="endpoint-tag">title</span>
+            <span class="endpoint-tag">medias[]</span>
+            <span class="endpoint-tag">thumbnail</span>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-top">
+            <div class="endpoint-icon" style="background:rgba(6,182,212,0.12);">
+              <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+            </div>
+            <span class="method-badge get">GET</span>
+          </div>
+          <div class="endpoint-path">/api/v1/s</div>
+          <div class="endpoint-name">Spotify Track Downloader</div>
+          <div class="endpoint-desc">Fetch full MP3 downloads for any Spotify track URL. Returns artist, title, album art, and a direct download link.</div>
+          <div class="endpoint-tags">
+            <span class="endpoint-tag">?url=</span>
+            <span class="endpoint-tag">?api=</span>
+            <span class="endpoint-tag">mp3</span>
+            <span class="endpoint-tag">artist</span>
+            <span class="endpoint-tag">thumbnail</span>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-top">
+            <div class="endpoint-icon" style="background:rgba(245,158,11,0.12);">
+              <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+            </div>
+            <span class="method-badge get">GET</span>
+          </div>
+          <div class="endpoint-path">/api/v1/xham</div>
+          <div class="endpoint-name">XHamster Extractor</div>
+          <div class="endpoint-desc">Multi-quality m3u8 stream extractor for XHamster. Returns adaptive streams at multiple resolutions.</div>
+          <div class="endpoint-tags">
+            <span class="endpoint-tag">?url=</span>
+            <span class="endpoint-tag">?api=</span>
+            <span class="endpoint-tag">streams{}</span>
+            <span class="endpoint-tag">m3u8</span>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-top">
+            <div class="endpoint-icon" style="background:rgba(239,68,68,0.12);">
+              <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+            </div>
+            <span class="method-badge get">GET</span>
+          </div>
+          <div class="endpoint-path">/api/v1/xham/search</div>
+          <div class="endpoint-name">XHamster Search</div>
+          <div class="endpoint-desc">Search XHamster by keyword and receive a structured list of results with titles, thumbnails, and video links.</div>
+          <div class="endpoint-tags">
+            <span class="endpoint-tag">?q=</span>
+            <span class="endpoint-tag">?api=</span>
+            <span class="endpoint-tag">results[]</span>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-top">
+            <div class="endpoint-icon" style="background:rgba(139,92,246,0.12);">
+              <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+            </div>
+            <span class="method-badge get">GET</span>
+          </div>
+          <div class="endpoint-path">/api/v1/hcity</div>
+          <div class="endpoint-name">HentaiCity Stream Extractor</div>
+          <div class="endpoint-desc">Extracts m3u8 stream URLs from HentaiCity. Returns title, thumbnail, trailer, and the main stream link.</div>
+          <div class="endpoint-tags">
+            <span class="endpoint-tag">?url=</span>
+            <span class="endpoint-tag">?api=</span>
+            <span class="endpoint-tag">m3u8</span>
+            <span class="endpoint-tag">trailer</span>
+          </div>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-top">
+            <div class="endpoint-icon" style="background:rgba(16,185,129,0.12);">
+              <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+            </div>
+            <span class="method-badge get">GET</span>
+          </div>
+          <div class="endpoint-path">/api/v1/phub</div>
+          <div class="endpoint-name">PornHub Downloader</div>
+          <div class="endpoint-desc">Download from PornHub via yt-dlp using .org mirror routing. Returns direct MP4 links at multiple quality levels.</div>
+          <div class="endpoint-tags">
+            <span class="endpoint-tag">?url=</span>
+            <span class="endpoint-tag">?api=</span>
+            <span class="endpoint-tag">formats[]</span>
+            <span class="endpoint-tag">duration</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="examples-section" id="examples">
+    <div class="container">
+      <div class="section-tag">Usage Examples</div>
+      <h2 class="section-title">Get Started in Seconds</h2>
+      <p class="section-sub">Copy and paste. Works with any HTTP client, any language.</p>
+
+      <div class="examples-layout">
+        <div>
+          <div class="example-tabs" id="langTabs">
+            <button class="tab-btn active" onclick="switchTab('curl')">cURL</button>
+            <button class="tab-btn" onclick="switchTab('python')">Python</button>
+            <button class="tab-btn" onclick="switchTab('js')">JS/Node</button>
+            <button class="tab-btn" onclick="switchTab('php')">PHP</button>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot dot-r"></div>
+                <div class="code-dot dot-y"></div>
+                <div class="code-dot dot-g"></div>
+              </div>
+              <button class="copy-btn" onclick="copyCode()">copy</button>
+            </div>
+            <div class="code-body">
+
+              <div class="code-panel active" id="tab-curl">
+<span class="c-comment"># AIO Universal Downloader</span>
+<span class="c-fn">curl</span> <span class="c-str">"https://aio-production-df67.up.railway.app/api/v1/dl</span>
+<span class="c-str">  ?url=https://youtube.com/watch?v=dQw4w9WgXcQ</span>
+<span class="c-str">  &amp;api=td_YOUR_KEY_HERE"</span>
+
+<span class="c-comment"># Spotify Download</span>
+<span class="c-fn">curl</span> <span class="c-str">"https://aio-production-df67.up.railway.app/api/v1/s</span>
+<span class="c-str">  ?url=https://open.spotify.com/track/TRACK_ID</span>
+<span class="c-str">  &amp;api=td_YOUR_KEY_HERE"</span>
+              </div>
+
+              <div class="code-panel" id="tab-python">
+<span class="c-kw">import</span> <span class="c-var">requests</span>
+
+<span class="c-var">BASE</span> = <span class="c-str">"https://aio-production-df67.up.railway.app/api/v1"</span>
+<span class="c-var">API_KEY</span> = <span class="c-str">"td_YOUR_KEY_HERE"</span>
+
+<span class="c-var">params</span> = {
+  <span class="c-str">"url"</span>: <span class="c-str">"https://youtube.com/watch?v=dQw4w9WgXcQ"</span>,
+  <span class="c-str">"api"</span>: <span class="c-var">API_KEY</span>
+}
+
+<span class="c-var">res</span> = <span class="c-fn">requests.get</span>(<span class="c-var">f"{BASE}/dl"</span>, <span class="c-var">params</span>=<span class="c-var">params</span>)
+<span class="c-var">data</span> = <span class="c-var">res</span>.<span class="c-fn">json</span>()
+
+<span class="c-fn">print</span>(<span class="c-var">data</span>[<span class="c-str">"title"</span>])
+<span class="c-fn">print</span>(<span class="c-var">data</span>[<span class="c-str">"medias"</span>][<span class="c-num">0</span>][<span class="c-str">"url"</span>])
+              </div>
+
+              <div class="code-panel" id="tab-js">
+<span class="c-kw">const</span> <span class="c-var">BASE</span> = <span class="c-str">'https://aio-production-df67.up.railway.app/api/v1'</span>
+<span class="c-kw">const</span> <span class="c-var">API_KEY</span> = <span class="c-str">'td_YOUR_KEY_HERE'</span>
+
+<span class="c-kw">async function</span> <span class="c-fn">download</span>(<span class="c-var">url</span>) {
+  <span class="c-kw">const</span> <span class="c-var">params</span> = <span class="c-kw">new</span> <span class="c-fn">URLSearchParams</span>({
+    <span class="c-key">url</span>: <span class="c-var">url</span>,
+    <span class="c-key">api</span>: <span class="c-var">API_KEY</span>
+  })
+
+  <span class="c-kw">const</span> <span class="c-var">res</span> = <span class="c-kw">await</span> <span class="c-fn">fetch</span>(<span class="c-str">`${BASE}/dl?${params}`</span>)
+  <span class="c-kw">const</span> <span class="c-var">data</span> = <span class="c-kw">await</span> <span class="c-var">res</span>.<span class="c-fn">json</span>()
+
+  <span class="c-var">console</span>.<span class="c-fn">log</span>(<span class="c-var">data</span>.<span class="c-key">title</span>)
+  <span class="c-var">console</span>.<span class="c-fn">log</span>(<span class="c-var">data</span>.<span class="c-key">medias</span>[<span class="c-num">0</span>].<span class="c-key">url</span>)
+}
+              </div>
+
+              <div class="code-panel" id="tab-php">
+<span class="c-var">$base</span> = <span class="c-str">'https://aio-production-df67.up.railway.app/api/v1'</span>;
+<span class="c-var">$key</span>  = <span class="c-str">'td_YOUR_KEY_HERE'</span>;
+<span class="c-var">$url</span>  = <span class="c-str">'https://youtube.com/watch?v=dQw4w9WgXcQ'</span>;
+
+<span class="c-var">$endpoint</span> = <span class="c-var">$base</span> . <span class="c-str">'/dl?url='</span>
+  . <span class="c-fn">urlencode</span>(<span class="c-var">$url</span>) . <span class="c-str">'&api='</span> . <span class="c-var">$key</span>;
+
+<span class="c-var">$res</span>  = <span class="c-fn">file_get_contents</span>(<span class="c-var">$endpoint</span>);
+<span class="c-var">$data</span> = <span class="c-fn">json_decode</span>(<span class="c-var">$res</span>, <span class="c-kw">true</span>);
+
+<span class="c-fn">echo</span> <span class="c-var">$data</span>[<span class="c-str">'title'</span>] . <span class="c-str">"\n"</span>;
+<span class="c-fn">echo</span> <span class="c-var">$data</span>[<span class="c-str">'medias'</span>][<span class="c-num">0</span>][<span class="c-str">'url'</span>];
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);font-weight:600;margin-bottom:12px;font-family:'JetBrains Mono',monospace;">Example Response</div>
+          <div class="response-block">
+            <div class="response-header">
+              <div style="font-size:12px;color:var(--text2);font-family:'JetBrains Mono',monospace;">GET /api/v1/dl</div>
+              <span class="status-200">200 OK</span>
+            </div>
+            <div class="response-body">
+<span style="color:var(--text3)">{</span><br>
+&nbsp;&nbsp;<span style="color:#818cf8">"success"</span>: <span style="color:#6ee7b7">true</span>,<br>
+&nbsp;&nbsp;<span style="color:#818cf8">"source"</span>: <span style="color:#fbbf24">"youtube"</span>,<br>
+&nbsp;&nbsp;<span style="color:#818cf8">"title"</span>: <span style="color:#fbbf24">"Never Gonna Give You Up"</span>,<br>
+&nbsp;&nbsp;<span style="color:#818cf8">"author"</span>: <span style="color:#fbbf24">"Rick Astley"</span>,<br>
+&nbsp;&nbsp;<span style="color:#818cf8">"thumbnail"</span>: <span style="color:#f9a8d4">"https://img.youtube.com/..."</span>,<br>
+&nbsp;&nbsp;<span style="color:#818cf8">"duration"</span>: <span style="color:#fbbf24">213</span>,<br>
+&nbsp;&nbsp;<span style="color:#818cf8">"type"</span>: <span style="color:#fbbf24">"video"</span>,<br>
+&nbsp;&nbsp;<span style="color:#818cf8">"medias"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--text3)">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#818cf8">"quality"</span>: <span style="color:#fbbf24">"1080p"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#818cf8">"ext"</span>: <span style="color:#fbbf24">"mp4"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#818cf8">"url"</span>: <span style="color:#f9a8d4">"https://..."</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#818cf8">"size"</span>: <span style="color:#fbbf24">84532400</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--text3)">}</span><br>
+&nbsp;&nbsp;]<br>
+<span style="color:var(--text3)">}</span>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;padding:16px 20px;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);border-radius:12px;">
+            <div style="font-size:12px;font-weight:700;color:#a5b4fc;margin-bottom:8px;font-family:'JetBrains Mono',monospace;">Authentication</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.6;">Pass your API key via query string <span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:12px">?api=td_xxx</span> or as HTTP header <span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:12px">X-API-Key: td_xxx</span>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-tag">FAQ</div>
+      <h2 class="section-title">Common Questions</h2>
+      <p class="section-sub">Everything you need to know before getting started.</p>
+
+      <div class="faq-grid">
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">How do I get an API key? <span class="faq-arrow">⌄</span></div>
+          <div class="faq-a">Contact us on Telegram at <a href="https://t.me/MR_ARMAN_08" target="_blank" style="color:#818cf8">@MR_ARMAN_08</a>. We'll generate a key for you and configure your rate limits based on your use case.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">What is the rate limit? <span class="faq-arrow">⌄</span></div>
+          <div class="faq-a">Default is 60 requests per 60 seconds per API key. Custom limits can be configured by admin. Contact us for higher limits.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">Can I use it without an API key? <span class="faq-arrow">⌄</span></div>
+          <div class="faq-a">This depends on whether API enforcement is enabled. When enforcement is off, the API key is optional and all requests are treated as anonymous. When enforcement is on, a valid key is required.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">What platforms does /api/v1/dl support? <span class="faq-arrow">⌄</span></div>
+          <div class="faq-a">It supports 35+ platforms via yt-dlp including YouTube, TikTok, Instagram, Facebook, Twitter/X, Vimeo, Dailymotion, Pinterest, Bandcamp, Reddit, Twitch, SoundCloud, and many more.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">What does the response include? <span class="faq-arrow">⌄</span></div>
+          <div class="faq-a">Responses include success status, source platform, title, author, thumbnail URL, duration in seconds, media type, and a medias array with quality, extension, direct URL, and file size for each available format.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">Is there a self-hosted option? <span class="faq-arrow">⌄</span></div>
+          <div class="faq-a">Yes. The project is built with FastAPI and can be deployed on any server or platform that supports Docker or Python. Check the Dockerfile in the repository for deployment guidance.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="links-section">
+    <div class="container">
+      <div class="section-tag">Resources</div>
+      <h2 class="section-title">Stay Connected</h2>
+
+      <div class="links-grid">
+        <a href="https://t.me/MR_ARMAN_08" target="_blank" class="link-card">
+          <div class="link-card-icon" style="background:rgba(99,102,241,0.12);">
+            <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+          </div>
+          <div>
+            <div class="link-card-label">Author</div>
+            <div class="link-card-title">@MR_ARMAN_08</div>
+            <div class="link-card-sub">Get your API key</div>
+          </div>
+        </a>
+
+        <a href="https://t.me/TeamDevXBots" target="_blank" class="link-card">
+          <div class="link-card-icon" style="background:rgba(6,182,212,0.12);">
+            <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+          </div>
+          <div>
+            <div class="link-card-label">Updates</div>
+            <div class="link-card-title">TeamDevXBots</div>
+            <div class="link-card-sub">Latest news & releases</div>
+          </div>
+        </a>
+
+        <a href="https://about.teamdev.sbs" target="_blank" class="link-card">
+          <div class="link-card-icon" style="background:rgba(139,92,246,0.12);">
+            <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+          </div>
+          <div>
+            <div class="link-card-label">About</div>
+            <div class="link-card-title">about.teamdev.sbs</div>
+            <div class="link-card-sub">Team information</div>
+          </div>
+        </a>
+
+        <a href="https://pay.teamdev.sbs" target="_blank" class="link-card">
+          <div class="link-card-icon" style="background:rgba(16,185,129,0.12);">
+            <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+          </div>
+          <div>
+            <div class="link-card-label">Donate</div>
+            <div class="link-card-title">pay.teamdev.sbs</div>
+            <div class="link-card-sub">Support development</div>
+          </div>
+        </a>
+
+        <a href="mailto:TeamDevMail@gmail.com" class="link-card">
+          <div class="link-card-icon" style="background:rgba(245,158,11,0.12);">
+            <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop></dotlottie-player>
+          </div>
+          <div>
+            <div class="link-card-label">Email</div>
+            <div class="link-card-title">TeamDevMail</div>
+            <div class="link-card-sub">TeamDevMail@gmail.com</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-left">
+    <a href="/" class="nav-logo" style="font-size:15px;">
+      <div class="logo-icon" style="width:28px;height:28px;border-radius:7px;font-size:12px;">
+        <dotlottie-player src="https://lottie.host/4db68bbd-cc6e-4571-8428-77fa4f7e703c/2CjxNBIyGE.lottie" background="transparent" speed="1" autoplay loop style="width:20px;height:20px;"></dotlottie-player>
+      </div>
+      TeamDev AIO
+    </a>
+    <span class="footer-copy">© 2026 TeamDev. All rights reserved.</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://t.me/MR_ARMAN_08" target="_blank" class="footer-link">Author</a>
+    <a href="https://about.teamdev.sbs" target="_blank" class="footer-link">About</a>
+    <a href="https://pay.teamdev.sbs" target="_blank" class="footer-link">Donate</a>
+    <a href="mailto:TeamDevMail@gmail.com" class="footer-link">Contact</a>
+  </div>
+</footer>
+
+<script>
+function switchTab(lang) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="switchTab('${lang}')"]`).classList.add('active');
+  document.getElementById(`tab-${lang}`).classList.add('active');
+}
+
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+function copyCode() {
+  const active = document.querySelector('.code-panel.active');
+  if (active) {
+    const text = active.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'copied!';
+      btn.style.color = '#6ee7b7';
+      setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
+    });
+  }
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.style.opacity = 1;
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.endpoint-card, .faq-item, .link-card').forEach(el => {
+  el.style.opacity = 0;
+  el.style.transition = 'opacity 0.5s ease, transform 0.25s ease, border-color 0.2s, box-shadow 0.2s';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
