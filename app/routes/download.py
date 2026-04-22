@@ -24,8 +24,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from app.core.deps import require_api_key
-from app.platforms import aio, phub, hcity, xham, spotify, terabox, cgpt
-import asyncio
+from app.platforms import aio, phub, hcity, xham, spotify, terabox
 
 router = APIRouter(tags=["Download"])
 
@@ -186,40 +185,4 @@ async def terabox_dl(
         "list": data.get("list", []),
         "free_credits_remaining": data.get("free_credits_remaining"),
     }
-
-
-@router.get("/gpt")
-async def gpt_chat(
-    q: str = Query(..., description="Prompt to send to ChatGPT"),
-    api: str = Query(None, description="API key"),
-    key_record=Depends(require_api_key)
-):
-    data, err = await asyncio.to_thread(cgpt.chat_gpt, q)
-    if err:
-        raise HTTPException(status_code=422, detail={"error": err})
-
-    return {
-        "success": True,
-        "source": "chatgpt",
-        "prompt": q,
-        "response": data.get("response"),
-    }
-
-
-@router.get("/imagine")
-async def imagine(
-    q: str = Query(..., description="Image generation prompt"),
-    api: str = Query(None, description="API key"),
-    key_record=Depends(require_api_key)
-):
-    data, err = await asyncio.to_thread(cgpt.generate_image, q)
-    if err:
-        raise HTTPException(status_code=422, detail={"error": err})
-
-    return {
-        "success": True,
-        "source": "deepai",
-        "prompt": q,
-        "image_url": data.get("image_url"),
-  }
   
