@@ -16,7 +16,24 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN playwright install --with-deps chromium
+RUN apt-get update && apt-get install -y \
+    wget curl gnupg unzip \
+    libnss3 libatk1.0-0 libatk-bridge2.0-0 \
+    libcups2 libxcomposite1 libxrandr2 \
+    libxdamage1 libxfixes3 libgbm1 \
+    libasound2 libpangocairo-1.0-0 \
+    libpango-1.0-0 libgtk-3-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google.gpg \
+    && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
+    > /etc/apt/sources.list.d/google.list \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
+    
+
 
 COPY . .
 
